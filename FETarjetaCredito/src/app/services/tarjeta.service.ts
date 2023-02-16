@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class TarjetaService {
 
 
-  private myAppUrl = 'https://localhost:7146/';
+  private myAppUrl = 'https://localhost:7133/';
   private myAPiUrl = 'api/tarjeta/';
   constructor(private http: HttpClient) { }
 

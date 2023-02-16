@@ -24,9 +24,9 @@ export class TarjetaCreditoComponent implements OnInit {
    }];*/
 
   listaTarjetas: any[] = [];
-
-
+  accion = 'Agregar';
   form: FormGroup;
+  id: number | undefined;
 
 
 
@@ -65,7 +65,7 @@ export class TarjetaCreditoComponent implements OnInit {
     })
   }
 
-  agregarTarjeta() {
+  guardarTarjeta() {
     const tarjeta: any = {
 
       titular: this.form.get('titular')?.value,
@@ -73,17 +73,47 @@ export class TarjetaCreditoComponent implements OnInit {
       fechaExpiracion: this.form.get('fechaExpiracion')?.value,
       cvv: this.form.get('cvv')?.value,
     }
+    //AGREGAMOS LA TARJETA
+    if (this.id == undefined) {
+      this._tarjetaService.guardarTarjeta(tarjeta).subscribe(data => {
+        this.form.reset();
+        this.toastr.success('La Tarjeta ha sido Agregada...', 'Tarjeta Registrada');
+        this.obtenerTarjetas();
 
-    this._tarjetaService.guardarTarjeta(tarjeta).subscribe(data => {
-      this.form.reset();
-      this.toastr.success('La Tarjeta ha sido Agregada...', 'Tarjeta Registrada');
-      this.obtenerTarjetas();
+      }, error => {
+        console.log(error);
+      })
+    }
+    else {//EDITAMOS LA TARJETA
 
-    }, error => {
-      console.log(error);
-    })
+      tarjeta.id = this.id;
+
+      this.accion = 'Agregar';
+      this._tarjetaService.updatetarjeta(this.id, tarjeta).subscribe(data => {
+        this.form.reset();
+        this.toastr.success('La tarjeta fue modificada', 'Tarjeta Modificada');
+        this.obtenerTarjetas();
+      }, error => {
+        console.log(error);
+      })
+    }
+
+
   }
 
+
+  editarTarjeta(tarjeta: any) {
+
+    this.accion = 'Editar';
+    this.id = tarjeta.id;
+
+    this.form.patchValue({
+      titular: tarjeta.titular,
+      numeroTarjeta: tarjeta.numeroTarjeta,
+      fechaExpiracion: tarjeta.fechaExpiracion,
+      cvv: tarjeta.cvv
+    })
+  }
 
 
 

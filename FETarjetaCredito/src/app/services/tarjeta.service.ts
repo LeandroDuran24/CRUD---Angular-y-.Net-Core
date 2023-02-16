@@ -29,4 +29,9 @@ export class TarjetaService {
   guardarTarjeta(tarjeta: any): Observable<any> {
     return this.http.post(this.myAppUrl + this.myAPiUrl, tarjeta);
   }
+
+
+  updatetarjeta(id: number, tarjeta: any): Observable<any> {
+    return this.http.put(this.myAppUrl + this.myAPiUrl + id, tarjeta);
+  }
 }
